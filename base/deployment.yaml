@@ -51,7 +51,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: rollouts-demo
+    app: demo
 ---
 apiVersion: v1
 kind: Service
