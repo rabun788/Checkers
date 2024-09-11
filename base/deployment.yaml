@@ -65,61 +65,61 @@ spec:
       name: http
   selector:
     app: demo
-#---
-#apiVersion: argoproj.io/v1alpha1
-#kind: Rollout
-#metadata:
-#  name: demo
-#spec:
-#  replicas: 5
-#  strategy:
-#    canary:
-#
-#      canaryService: demo-canary-service # our created canary service
-#      stableService: demo-stable-service # our created stable service
-#      trafficRouting:
-#        plugins:
-#          argoproj-labs/gatewayAPI:
-#            httpRoute: demo-http-route # our created httproute
-#            namespace: default # namespace where this rollout resides.
-##      steps:
-##        - setWeight: 10
-##        - pause: { duration: 60 }
-##        - setWeight: 20
-##        - pause: { duration: 60 }
-##        - setWeight: 30
-##        - pause: { duration: 60 }
-##        - setWeight: 40
-##        - pause: { duration: 60 }
-##        - setWeight: 50
-##        - pause: { duration: 60 }
-##        - setWeight: 60
-##        - pause: { duration: 60 }
-##        - setWeight: 70
-##        - pause: { duration: 60 }
-##        - setWeight: 80
-##        - pause: { duration: 60 }
-##        - setWeight: 90
-##        - pause: { duration: 60 }
-##        - setWeight: 100
-#
-#  revisionHistoryLimit: 2
-#  selector:
-#    matchLabels:
-#      app: demo
-#  template:
-#    metadata:
-#      labels:
-#        app: demo
-#    spec:
-#      containers:
-#        - name: demo
-#          image: argoproj/rollouts-demo:yellow
-#          ports:
-#            - name: http
-#              containerPort: 8080
-#              protocol: TCP
-#          resources:
-#            requests:
-#              memory: 32Mi
-#              cpu: 5m
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: demo
+spec:
+  replicas: 5
+  strategy:
+    canary:
+
+      canaryService: demo-canary-service # our created canary service
+      stableService: demo-stable-service # our created stable service
+      trafficRouting:
+        plugins:
+          argoproj-labs/gatewayAPI:
+            httpRoute: demo-http-route # our created httproute
+            namespace: default # namespace where this rollout resides.
+      steps:
+        - setWeight: 10
+        - pause: { duration: 60 }
+        - setWeight: 20
+        - pause: { duration: 60 }
+        - setWeight: 30
+        - pause: { duration: 60 }
+        - setWeight: 40
+        - pause: { duration: 60 }
+        - setWeight: 50
+        - pause: { duration: 60 }
+        - setWeight: 60
+        - pause: { duration: 60 }
+        - setWeight: 70
+        - pause: { duration: 60 }
+        - setWeight: 80
+        - pause: { duration: 60 }
+        - setWeight: 90
+        - pause: { duration: 60 }
+        - setWeight: 100
+
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - name: demo
+          image: argoproj/rollouts-demo:yellow
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 5m
