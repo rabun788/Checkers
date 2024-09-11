@@ -79,7 +79,7 @@ spec:
       stableService: demo-stable-service # our created stable service
       trafficRouting:
         plugins:
-          one-thd/gatewayAPI:
+          argoproj-labs/gatewayAPI:
             httpRoute: demo-http-route # our created httproute
             namespace: default # namespace where this rollout resides.
 #      steps:
