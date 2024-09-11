@@ -31,8 +31,8 @@ metadata:
 spec:
   parentRefs:
     - name: eg
-  #  hostnames:
-  #    - "demo.example.com"
+  hostnames:
+    - "demo.thdlabs.io"
   rules:
     - backendRefs:
         - name: demo-stable-service
@@ -82,14 +82,26 @@ spec:
             httpRoute: demo-http-route # our created httproute
             namespace: default # namespace where this rollout resides.
       steps:
+        - setWeight: 10
+        - pause: { duration: 60 }
+        - setWeight: 20
+        - pause: { duration: 60 }
         - setWeight: 30
-        - pause: {}
+        - pause: { duration: 60 }
         - setWeight: 40
-        - pause: { duration: 10 }
+        - pause: { duration: 60 }
+        - setWeight: 50
+        - pause: { duration: 60 }
         - setWeight: 60
-        - pause: { duration: 10 }
+        - pause: { duration: 60 }
+        - setWeight: 70
+        - pause: { duration: 60 }
         - setWeight: 80
-        - pause: { duration: 10 }
+        - pause: { duration: 60 }
+        - setWeight: 90
+        - pause: { duration: 60 }
+        - setWeight: 100
+
   revisionHistoryLimit: 2
   selector:
     matchLabels:
