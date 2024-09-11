@@ -93,7 +93,7 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: rollouts-demo
+      app: demo
   template:
     metadata:
       labels:
