@@ -74,8 +74,9 @@ spec:
   replicas: 5
   strategy:
     canary:
+
       canaryService: demo-canary-service # our created canary service
-      stableService: demo-stable-service # our created stable service
+#      stableService: demo-stable-service # our created stable service
       trafficRouting:
         plugins:
           one-thd/wayfinder:
