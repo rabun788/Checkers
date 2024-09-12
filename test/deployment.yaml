@@ -212,6 +212,10 @@ spec:
     metadata:
       name: '{{.cluster}}-checkers'
     spec:
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
       project: default
       source:
         repoURL: https://github.com/rabun788/checkers.git
