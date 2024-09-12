@@ -117,7 +117,7 @@ spec:
     spec:
       containers:
         - name: demo
-          image: argoproj/rollouts-demo:yellow
+          image: argoproj/rollouts-demo:red
           ports:
             - name: http
               containerPort: 8080
@@ -126,39 +126,3 @@ spec:
             requests:
               memory: 32Mi
               cpu: 5m
-#---
-#apiVersion: argoproj.io/v1alpha1
-#kind: ApplicationSet
-#metadata:
-#  name: checkers
-#spec:
-#  goTemplate: true
-#  goTemplateOptions: ["env=labs"]
-#  generators:
-#    - list:
-#        elements:
-#          - cluster: gke_thdlabs-tailscale_us-central1_gke-us-central1-blue
-#            url: https://34.136.15.85
-#          - cluster: gke_thdlabs-tailscale_us-central1_gke-us-central1-green
-#            url: https://34.28.180.171
-#          - cluster: gke_thdlabs-tailscale_us-east1_gke-us-east1-blue
-#            url: https://34.23.161.80
-#          - cluster: gke_thdlabs-tailscale_us-east1_gke-us-east1-green
-#            url: https://34.73.66.163
-#          - cluster: gke_thdlabs-tailscale_us-west1_gke-us-west1-blue
-#            url: https://104.198.96.30
-#          - cluster: gke_thdlabs-tailscale_us-west1_gke-us-west1-green
-#            url: https://34.83.212.215
-#
-#  template:
-#    metadata:
-#      name: '{{.cluster}}-checkers'
-#    spec:
-#      project: default
-#      source:
-#        repoURL: https://github.com/rabun788/checkers.git
-#        targetRevision: HEAD
-#        path: overlays/dev
-#      destination:
-#        server: '{{.url}}'
-#        namespace: default

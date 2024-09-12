@@ -1,0 +1,210 @@
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: nginx
+#  labels:
+#    app: nginx
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: nginx
+#  template:
+#    metadata:
+#      labels:
+#        app: nginx
+#    spec:
+#      containers:
+#        - name: nginx
+#          image: nginx:latest
+#          ports:
+#            - containerPort: 80
+#
+#
+#
+#---
+#apiVersion: gateway.networking.k8s.io/v1beta1
+#kind: HTTPRoute
+#metadata:
+#  name: demo-http-route
+#spec:
+#  parentRefs:
+#    - name: eg
+#  hostnames:
+#    - "demo.thdlabs.io"
+#  rules:
+#    - backendRefs:
+#        - name: demo-stable-service
+#          port: 80
+#        - name: demo-canary-service
+#          port: 80
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: demo-canary-service
+#spec:
+#  ports:
+#    - port: 80
+#      targetPort: http
+#      protocol: TCP
+#      name: http
+#  selector:
+#    app: demo
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: demo-stable-service
+#spec:
+#  ports:
+#    - port: 80
+#      targetPort: http
+#      protocol: TCP
+#      name: http
+#  selector:
+#    app: demo
+#---
+#apiVersion: argoproj.io/v1alpha1
+#kind: Rollout
+#metadata:
+#  name: demo
+#spec:
+#  replicas: 5
+#  strategy:
+#    canary:
+#
+#      canaryService: demo-canary-service # our created canary service
+#      stableService: demo-stable-service # our created stable service
+#
+#      maxUnavailable: 1
+#
+#      trafficRouting:
+#        plugins:
+#          argoproj-labs/gatewayAPI:
+#            httpRoute: demo-http-route # our created httproute
+#            namespace: default # namespace where this rollout resides.
+#      steps:
+#        - setWeight: 10
+#        - pause: { duration: 60 }
+#        - setWeight: 20
+#        - pause: { duration: 60 }
+#        - setWeight: 30
+#        - pause: { duration: 60 }
+#        - setWeight: 40
+#        - pause: { duration: 60 }
+#        - setWeight: 50
+#        - pause: { duration: 60 }
+#        - setWeight: 60
+#        - pause: { duration: 60 }
+#        - setWeight: 70
+#        - pause: { duration: 60 }
+#        - setWeight: 80
+#        - pause: { duration: 60 }
+#        - setWeight: 90
+#        - pause: { duration: 60 }
+#        - setWeight: 100
+#
+#  revisionHistoryLimit: 2
+#  selector:
+#    matchLabels:
+#      app: demo
+#  template:
+#    metadata:
+#      labels:
+#        app: demo
+#    spec:
+#      containers:
+#        - name: demo
+#          image: argoproj/rollouts-demo:yellow
+#          ports:
+#            - name: http
+#              containerPort: 8080
+#              protocol: TCP
+#          resources:
+#            requests:
+#              memory: 32Mi
+#              cpu: 5m
+##---
+##apiVersion: argoproj.io/v1alpha1
+##kind: ApplicationSet
+##metadata:
+##  name: checkers
+##spec:
+##  goTemplate: true
+##  goTemplateOptions: ["env=labs"]
+##  generators:
+##    - list:
+##        elements:
+##          - cluster: gke_thdlabs-tailscale_us-central1_gke-us-central1-blue
+##            url: https://34.136.15.85
+##          - cluster: gke_thdlabs-tailscale_us-central1_gke-us-central1-green
+##            url: https://34.28.180.171
+##          - cluster: gke_thdlabs-tailscale_us-east1_gke-us-east1-blue
+##            url: https://34.23.161.80
+##          - cluster: gke_thdlabs-tailscale_us-east1_gke-us-east1-green
+##            url: https://34.73.66.163
+##          - cluster: gke_thdlabs-tailscale_us-west1_gke-us-west1-blue
+##            url: https://104.198.96.30
+##          - cluster: gke_thdlabs-tailscale_us-west1_gke-us-west1-green
+##            url: https://34.83.212.215
+##
+##  template:
+##    metadata:
+##      name: '{{.cluster}}-checkers'
+##    spec:
+##      project: default
+##      source:
+##        repoURL: https://github.com/rabun788/checkers.git
+##        targetRevision: HEAD
+##        path: overlays/dev
+##      destination:
+##        server: '{{.url}}'
+##        namespace: default
+#---
+#apiVersion: argoproj.io/v1alpha1
+#kind: ArgoCD
+#metadata:
+#  name: demo
+#  namespace: default
+#spec:
+#  applicationSet:
+#    enabled: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: checkers
+spec:
+  goTemplate: true
+  goTemplateOptions: []
+  generators:
+    - list:
+        elements:
+          #  gcloud container clusters list --format="value(name, endpoint)"
+          - cluster: gke-us-central1-blue
+            url: https://34.136.15.85
+          - cluster: gke-us-central1-green
+            url: https://34.28.180.171
+          - cluster: gke-us-east1-blue
+            url: https://34.23.161.80
+          - cluster: gke-us-east1-green
+            url: https://34.73.66.163
+          - cluster: gke-us-west1-blue
+            url: https://104.198.96.30
+          - cluster: gke-us-west1-green
+            url: https://34.83.212.215
+
+  template:
+    metadata:
+      name: '{{.cluster}}-checkers'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/rabun788/checkers.git
+        targetRevision: HEAD
+        path: overlays/dev
+      destination:
+        server: '{{.url}}'
+        namespace: default
