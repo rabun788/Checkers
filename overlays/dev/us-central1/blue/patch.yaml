@@ -5,3 +5,4 @@ metadata:
 spec:
   parentRefs:
     - name: gateway-us-central1-blue
+      namespace: gateway

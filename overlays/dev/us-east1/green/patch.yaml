@@ -5,3 +5,4 @@ metadata:
 spec:
   parentRefs:
     - name: gateway-us-east1-green
+      namespace: gateway
