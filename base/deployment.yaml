@@ -5,7 +5,7 @@ metadata:
   name: demo-http-route
 spec:
   parentRefs:
-    - name: eg
+    - name: external-http
   hostnames:
     - "demo.thdlabs.io"
   rules:
