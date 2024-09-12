@@ -184,16 +184,28 @@ spec:
         elements:
           #  gcloud container clusters list --format="value(name, endpoint)"
           - cluster: gke-us-central1-blue
+            region: us-central1
+            deployment: blue
             url: https://34.136.15.85
           - cluster: gke-us-central1-green
+            region: us-central1
+            deployment: green
             url: https://34.28.180.171
           - cluster: gke-us-east1-blue
+            region: us-east1
+            deployment: blue
             url: https://34.23.161.80
           - cluster: gke-us-east1-green
+            region: us-east1
+            deployment: green
             url: https://34.73.66.163
           - cluster: gke-us-west1-blue
+            region: us-west1
+            deployment: blue
             url: https://104.198.96.30
           - cluster: gke-us-west1-green
+            region: us-west1
+            deployment: green
             url: https://34.83.212.215
 
   template:
@@ -204,7 +216,7 @@ spec:
       source:
         repoURL: https://github.com/rabun788/checkers.git
         targetRevision: HEAD
-        path: overlays/dev
+        path: 'overlays/dev/{{.region}}/{{.deployment}}'
       destination:
         server: '{{.url}}'
         namespace: default
