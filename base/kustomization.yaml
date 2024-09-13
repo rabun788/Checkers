@@ -1,2 +1,2 @@
 resources:
-  - deployment-bluegreen.yaml
+  - deployment-canary.yaml
